@@ -1,0 +1,29 @@
+﻿@using TestTask.Models
+@model IEnumerable<Organization>
+@{
+    ViewData["Title"] = "Справочник Организаций";
+}
+
+<a asp-action="Create">Добавить организацию</a>
+<table class="table">
+    <tr>
+        <th>Наименование организации</th>
+        <th>Департамент</th>
+        <th></th>
+    </tr>
+    @foreach (Organization o in Model)
+    {
+    <tr>
+        <td>@o.Name</td>
+        <td>@o.Department</td>
+        <td>
+            <form asp-action="Delete" asp-route-id="@o.Id" method="post">
+                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@o.Id">Изменить</a>
+                <button type="submit" class="btn btn-sm btn-danger">
+                    Удалить
+                </button>
+            </form>
+        </td>
+    </tr>
+    }
+</table>

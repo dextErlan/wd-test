@@ -1,0 +1,26 @@
+﻿@model TestTask.Models.Organization
+@{
+    ViewBag.Title = "Удаление организации";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>Наименование</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>Подразделение</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Department)
+        </dd>
+    </dl>
+
+    <div>
+        <form asp-controller="Organizations" asp-action="Delete" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-default" value="Удалить" />
+            </div>
+        </form>
+    </div>
+</div>

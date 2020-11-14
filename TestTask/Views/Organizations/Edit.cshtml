@@ -1,0 +1,17 @@
+﻿@model TestTask.Models.Organization
+@{
+    ViewBag.Title = "Редактирование организации";
+}
+<form asp-action="edit" asp-controller="Organizations" asp-route-id="@Model.Id">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Наименование</label>
+        <input type="text" asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Department" class="control-label">Подразделение</label>
+        <input type="text" asp-for="Department" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+</form>
