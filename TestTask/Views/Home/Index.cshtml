@@ -1,23 +1,101 @@
-﻿@{
+﻿@using TestTask.Models
+@using TestTask.ViewModels
+@model IndexViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-<table>
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+</style>
+<h1>Телефонный справочник</h1>
+<form method="get">
+    <div class="form-inline">
+        <label>Номер: </label>
+        <input name="number" value="@Model.FilterViewModel.SelectedNumber" class="form-control" />
+
+        <label>Компания: </label>
+        <select name="orgId" asp-items="@Model.FilterViewModel.Organizations" class="form-control"></select>
+
+        <label>ФИО: </label>
+        <select name="personId" asp-items="@Model.FilterViewModel.Persons" class="form-control"></select>
+
+        <label>Адрес: </label>
+        <select name="roomId" asp-items="@Model.FilterViewModel.Rooms" class="form-control"></select>
+
+        <input type="submit" value="Фильтр" class="btn btn-outline-dark" />
+    </div>
+</form>
+
+<table class="table">
     <tr>
-        <td>Модель</td>
-        <td>Производитель</td>
-        <td>Цена</td>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.NumberSort)"
+               asp-route-number="@(Model.FilterViewModel.SelectedNumber)"
+               asp-route-org="@(Model.FilterViewModel.SelectedOrg)">Номер</a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.OrgSort)"
+               asp-route-number="@(Model.FilterViewModel.SelectedNumber)"
+               asp-route-org="@(Model.FilterViewModel.SelectedOrg)">Компания</a>
+        </th>
+        <th>ФИО</th>
+        <th>Адрес</th>
     </tr>
-    @foreach (var phone in Model)
+    @foreach (Phone p in Model.Phones)
     {
-        <tr>
-            <td>@phone.Number</td>
-            <td>@phone.Organization?.Name</td>
-            <td>@phone.Person?.FirstName</td>            
-        </tr>
+<tr>
+    <td>@p.Number</td>
+    <td>@p.Organization?.Name</td>
+    <td>@p.Person?.FullName</td>
+    <td>@p.Room?.FullAddress</td>
+</tr>
     }
 </table>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-number="@(Model.FilterViewModel.SelectedNumber)"
+       asp-route-org="@(Model.FilterViewModel.SelectedOrg)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
+       class="btn  btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-number="@(Model.FilterViewModel.SelectedNumber)"
+       asp-route-org="@(Model.FilterViewModel.SelectedOrg)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

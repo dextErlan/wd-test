@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,30 +11,46 @@ namespace TestTask.Models
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            Organization hm = new Organization
+            if (!context.Phones.Any())
             {
-                Name = "H&M",
-                Department = "one"
-            };
-            Organization nestle = new Organization
-            {
-                Name = "Nestle",
-                Department = ""
-            };
-            Person marat = new Person
-            {
-                FirstName = "Marat",
-                MiddleName = "Nurlan uli",
-                LastName = "Saparov"
-            };
-            Person Ivan = new Person
-            {
-                FirstName = "Ivan",
-                MiddleName = "Ivanovich",
-                LastName = "Ivanov"
-            };
-            if (!context.Rooms.Any())
-            {
+                Organization hm = new Organization
+                {
+                    Name = "H&M",
+                    Department = "one"
+                };
+                Organization nestle = new Organization
+                {
+                    Name = "Nestle",
+                    Department = ""
+                };
+                Organization raimbek = new Organization
+                {
+                    Name = "Raimbek",
+                    Department = "Almaty"
+                };
+                Organization raimbek_ns = new Organization
+                {
+                    Name = "Raimbek",
+                    Department = "Nursultan"
+                };
+                Organization nurzhanar = new Organization
+                {
+                    Name = "Nurzhanar",
+                    Department = ""
+                };
+                Person marat = new Person
+                {
+                    FirstName = "Marat",
+                    MiddleName = "Nurlan uli",
+                    LastName = "Saparov"
+                };
+                Person Ivan = new Person
+                {
+                    FirstName = "Ivan",
+                    MiddleName = "Ivanovich",
+                    LastName = "Ivanov"
+                };
+
                 context.Rooms.AddRange(
                     new Room
                     {
@@ -62,25 +79,43 @@ namespace TestTask.Models
                     new Room
                     {
                         Country = "Kz",
+                        City = "Almaty",
+                        Street = "Abay",
+                        Build = "30B",
+                        Office = 1
+                    },
+                    new Room
+                    {
+                        Country = "Kz",
+                        City = "Almaty",
+                        Street = "Abay",
+                        Build = "33",
+                        Office = 3
+                    },
+                    new Room
+                    {
+                        Country = "Kz",
+                        City = "Uralsk",
+                        Street = "Abay",
+                        Build = "14",
+                        Office = 14
+                    },
+                    new Room
+                    {
+                        Country = "Kz",
                         City = "Uralsk",
                         Street = "Dostyk",
                         Build = "4",
                         Office = 7
                     });
                 context.SaveChanges();
-            }
-            if (!context.Organizations.Any())
-            {
-                context.Organizations.AddRange(hm, nestle);
+
+                context.Organizations.AddRange(hm, nestle, raimbek, raimbek_ns, nurzhanar);
                 context.SaveChanges();
-            }
-            if (!context.Persons.Any())
-            {
+
                 context.Persons.AddRange(marat, Ivan);
                 context.SaveChanges();
-            }
-            if (!context.Phones.Any())
-            {
+
                 context.Phones.AddRange(
                     new Phone
                     {
@@ -96,6 +131,24 @@ namespace TestTask.Models
                     },
                     new Phone
                     {
+                        Number = 7774444567,
+                        Organization = raimbek,
+                        RoomId = 1
+                    },
+                    new Phone
+                    {
+                        Number = 7014444567,
+                        Organization = raimbek_ns,
+                        RoomId = 2
+                    },
+                    new Phone
+                    {
+                        Number = 7777774567,
+                        Organization = nurzhanar,
+                        RoomId = 1
+                    },
+                    new Phone
+                    {
                         Number = 7471234567,
                         Person = marat,
                         RoomId = 3
@@ -108,7 +161,7 @@ namespace TestTask.Models
                     }
                 );
                 context.SaveChanges();
-            }
-        }
+            }            
+        }        
     }
 }

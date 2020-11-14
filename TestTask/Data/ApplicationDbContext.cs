@@ -7,7 +7,7 @@ using TestTask.Models;
 
 namespace TestTask.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<Phone> Phones { get; set; }
         public DbSet<Person> Persons { get; set; }
@@ -17,7 +17,24 @@ namespace TestTask.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Phone>()
+                .HasOne(p => p.Organization)
+                .WithMany(t => t.Phones)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Phone>()
+                .HasOne(p => p.Person)
+                .WithMany(t => t.Phones)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Phone>()
+                .HasOne(p => p.Room)
+                .WithMany(t => t.Phones)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
